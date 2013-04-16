@@ -268,6 +268,8 @@ MainWindow::~MainWindow()
 //    }
     if (joystick)
     {
+        joystick->shutdown();
+        joystick->wait(5000);
         delete joystick;
         joystick = NULL;
     }
