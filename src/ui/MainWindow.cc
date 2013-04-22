@@ -161,6 +161,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     customStatusBar = new QGCStatusBar(this);
     this->setStatusBar(customStatusBar);
+    toolBar->addPerspectiveChangeAction(ui.actionConfiguration_2);
 
     emit initStatusChanged("Building common widgets.");
 
@@ -1060,6 +1061,7 @@ void MainWindow::connectCommonActions()
     if (currentView == VIEW_PILOT) ui.actionPilotsView->setChecked(true);
     if (currentView == VIEW_SIMULATION) ui.actionSimulation_View->setChecked(true);
     if (currentView == VIEW_OPERATOR) ui.actionOperatorsView->setChecked(true);
+    if (currentView == VIEW_CONFIGURATION) ui.actionConfiguration_2->setChecked(true);
     if (currentView == VIEW_FIRMWAREUPDATE) ui.actionFirmwareUpdateView->setChecked(true);
     if (currentView == VIEW_UNCONNECTED) ui.actionUnconnectedView->setChecked(true);
 
@@ -1091,6 +1093,7 @@ void MainWindow::connectCommonActions()
     connect(ui.actionEngineersView, SIGNAL(triggered()), this, SLOT(loadEngineerView()));
     connect(ui.actionOperatorsView, SIGNAL(triggered()), this, SLOT(loadOperatorView()));
     connect(ui.actionUnconnectedView, SIGNAL(triggered()), this, SLOT(loadUnconnectedView()));
+    connect(ui.actionConfiguration_2,SIGNAL(triggered()),this,SLOT(loadConfigurationView()));
 
     connect(ui.actionFirmwareUpdateView, SIGNAL(triggered()), this, SLOT(loadFirmwareUpdateView()));
     connect(ui.actionMavlinkView, SIGNAL(triggered()), this, SLOT(loadMAVLinkView()));
@@ -1547,6 +1550,9 @@ void MainWindow::loadViewState()
         // Load defaults
         switch (currentView)
         {
+        case VIEW_CONFIGURATION:
+            centerStack->setCurrentWidget(configWidget);
+            break;
         case VIEW_ENGINEER:
             centerStack->setCurrentWidget(linechartWidget);
             controlDockWidget->hide();
@@ -1699,6 +1705,16 @@ void MainWindow::loadOperatorView()
         storeViewState();
         currentView = VIEW_OPERATOR;
         ui.actionOperatorsView->setChecked(true);
+        loadViewState();
+    }
+}
+void MainWindow::loadConfigurationView()
+{
+    if (currentView != VIEW_CONFIGURATION)
+    {
+        storeViewState();
+        currentView = VIEW_CONFIGURATION;
+        ui.actionConfiguration_2->setChecked(true);
         loadViewState();
     }
 }
